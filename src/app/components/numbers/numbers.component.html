@@ -1,0 +1,36 @@
+<div>
+  <div *ngFor="let item of arr; let i = index" class="box">
+    <div [ngStyle]="{'background-color': 'rgba(0,0,255,'+ (updateCSS(item)/100) +')'}">{{ item }}</div>
+  </div>
+  <div class="searchBox">
+    <form (ngSubmit)="onSubmit()" #ipForm="ngForm">
+      <div class="form-group">
+        <label for="ip">Please input ip you want to search:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="ip"
+          name="ip"
+          required
+          [(ngModel)]="model.ip"
+          #ip="ngModel"
+        />
+        <div
+          [hidden]="ip.valid && (ip.dirty || ip.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="ip.errors?.['required']">IP is required</div>
+          <!-- <div *ngIf="ip.errors?.['minlength']">Name is at least 4 chars</div> -->
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="!ipForm.form.valid"
+      >
+        Search
+      </button>
+    </form>
+  </div>
+</div>
