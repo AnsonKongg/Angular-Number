@@ -22,7 +22,7 @@ export class NumberService {
     let now = new Date().getTime();
     let setupTime = Number(localStorage.getItem(`${ip}Time`));
 
-    if (localStorage.getItem(ip) && now - setupTime <= hours * 3600 * 1000) {
+    if (localStorage.getItem(ip) && localStorage.getItem(`${ip}Time`) && now - setupTime <= hours * 3600 * 1000) {
       return of(JSON.parse(localStorage.getItem(ip)));
     } else {
       const url = `${this.apiURL}/${ip}`;
