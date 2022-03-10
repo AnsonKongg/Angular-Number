@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 
 const httpOptions = {
@@ -18,8 +18,12 @@ export class NumberService {
   constructor(private http: HttpClient) {}
 
   getNumbers(ip: string): Observable<object> {
-    if (localStorage.getItem(ip)) {
-      return of(JSON.parse(localStorage.getItem(ip)))
+    let hours = 4;
+    let now = new Date().getTime();
+    let setupTime = Number(localStorage.getItem(`${ip}Time`));
+
+    if (localStorage.getItem(ip) && now - setupTime <= hours * 3600 * 1000) {
+      return of(JSON.parse(localStorage.getItem(ip)));
     } else {
       const url = `${this.apiURL}/${ip}`;
 
@@ -29,6 +33,7 @@ export class NumberService {
             alert('No data for this ip address!');
           } else {
             localStorage.setItem(ip, JSON.stringify(res));
+            localStorage.setItem(`${ip}Time`, String(now));
           }
         }),
         catchError((err) => {
